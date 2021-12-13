@@ -56,7 +56,7 @@ def balance():
 
 def bank():
 	filename = 'banknotes.data'
-	with open(filename) as f:
+	with open(filename, 'r+') as f:
 		banknotes = json.load(f)
 		if not banknotes:
 			banknotes = {'10': 0, '20': 5, '50': 5, '100': 3, '200': 10, '500': 1, '1000': 1}
@@ -68,10 +68,10 @@ def get_load():
 	load = {}
 	while True:
 		par = input('Enter par (empty enter - exit):')
-		if npar = '':
+		if par == '':
 			break
 		quantity = int(input('Enter quantity:'))
-		load(par) = quantity
+		load[par] = quantity
 	return load
 		
 def login_check(login):
@@ -95,13 +95,99 @@ def check_balance(user):
 	return balance
 
 def sort(summ):
-	s = 10 * banknotes['10'] + 20 * banknotes['20'] + 50 * banknotes['50'] + 100 * banknotes['100'] + 200 * banknotes['200'] + 500 * banknotes['500'] + 1000 * banknotes['1000']
-	if s - summ >= 0:
-		if banknotes['10'] == 0:
-			
-
+	summ_banknotes = 10 * banknotes['10'] + 20 * banknotes['20'] + 50 * banknotes['50'] + 100 * banknotes['100'] + 200 * banknotes['200'] + 500 * banknotes['500'] + 1000 * banknotes['1000']
+	sorted = {'10': 0, '20': 0, '50': 0, '100': 0, '200': 0, '500': 0, '1000': 0}
+	if summ_banknotes - summ >= 0:
+		if banknotes['1000'] > 0:
+			n1000 = summ // 1000
+			if n1000 <= banknotes['1000']:
+				sorted.update('1000', n1000)
+			else:
+				n1000 = banknotes['1000']
+				sorted.update('1000', n1000)
+			summ = summ - 1000 * n1000
+			if summ % 500 != 0 and summ % 200 != 0 and summ % 100 != 0 and summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
+				n1000 = 0
+				summ = summ - 1000 * n1000
+				sorted.update('1000', n1000)
+			banknotes.update('1000', -n1000)
+		if banknotes['500'] >= 0:
+			n500 = summ // 500
+			if n500 <= banknotes['500']:
+				sorted.update('500', n500)
+			else:
+				n500 = banknotes['500']
+				sorted.update('500', n500)
+			summ = summ - 500 * n500
+			if summ % 200 != 0 and summ % 100 != 0 and summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
+				n500 = 0
+				summ = summ - 500 * n500
+				sorted.update('500', n500)	
+			banknotes.update('500', -n500)
+		if banknotes['200'] >= 0:
+			n200 = summ // 200
+			if n200 <= banknotes['200']:
+				sorted.update('200', n200)
+			else:
+				n200 = banknotes['200']
+				sorted.update('200', n200)
+			summ = summ - 200 * n200
+			if summ % 100 != 0 and summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
+				n200 = 0
+				summ = summ - 200 * n200
+				sorted.update('200', n200)
+			banknotes.update('200', -n200)
+		if banknotes['100'] >= 0:
+			n100 = summ // 100
+			if n100 <= banknotes['100']:
+				sorted.update('100', n100)
+			else:
+				n100 = banknotes['100']
+				sorted.update('100', n100)
+			summ = summ - 100 * n100
+			if summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
+				n100 = 0
+				summ = summ - 100 * n100
+				sorted.update('100', n100)
+			banknotes.update('100', -n100)
+		if banknotes['50'] >= 0:
+			n50 = summ // 50
+			if n50 <= banknotes['50']:
+				sorted.update('50', n50)
+			else:
+				n50 = banknotes['50']
+				sorted.update('50', n50)
+			summ = summ - 50 * n50
+			if summ % 20 != 0 and summ % 10 != 0:
+				n50 = 0
+				summ = summ - 50 * n50
+				sorted.update('50', n50)
+			banknotes.update('50', -n50)
+		if banknotes['20'] >= 0:
+			n20 = summ // 20
+			if n20 <= banknotes['20']:
+				sorted.update('20', n20)
+			else:
+				n20 = banknotes['20']
+				sorted.update('20', n20)
+			summ = summ - 20 * n20
+			if summ % 10 != 0:
+				n20 = 0
+				summ = summ - 20 * n20
+				sorted.update('20', n20)
+			banknotes.update('20', -n20)	
+		if banknotes['10'] >= 0:
+			n10 = summ // 10
+			if n10 <= banknotes['10']:
+				sorted.update('10', n10)
+			else:
+				n10 = banknotes['10']
+				sorted.update('10', n10)
+			summ = summ - 10 * n10
+			banknotes.update('10', -n10)
+		print(f"You got 10: {sorted['10']}, 20: {sorted['20']}, 50: {sorted['50']}, 100: {sorted['100']}, 200: {sorted['200']}, 500: {sorted['500']}, 1000: {sorted['1000']}.")	
 	else:
-		print'The ATM does not have this amount of funds.'			
+		print('The ATM does not have this amount of funds.')			
 
 def withdraw(user, summ):
 	filename = str(user['login']) + '_balance.data'
@@ -165,7 +251,7 @@ def agent_choice(choice):
 		filename = 'banknotes.data'
 		with open(filename, 'w') as f:
 				json.dump(banknotes, f)
-			print('\nYou have change the number of banknotes. \nThe set of banknotes: {banknotes}.')
+		print('\nYou have change the number of banknotes. \nThe set of banknotes: {banknotes}.')
 
 def start():
 	users()
@@ -175,7 +261,7 @@ def start():
 	user = login_check(login_test)
 	password_test = str(input('Enter password: '))
 	if password_check(user, password_test):
-		if user['login'] = agent:
+		if user['login'] == agent:
 			while True:
 				choice = int(input('\nSelect item:\n1. Check set of banknotes.\n2. Change the number of banknotes.\n3. Exit.\n\nYour choice: '))
 				if choice == 3:
