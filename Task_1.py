@@ -41,30 +41,52 @@ def users():
 		json.dump(users, f)
 
 def balance():
-	balance1 = 0
-	filename = 'Alex_balance.data'
-	with open(filename, 'w') as f:
-		json.dump(balance1, f)
-	balance2 = 100
-	filename = 'Anna_balance.data'
-	with open(filename, 'w') as f:
-		json.dump(balance2, f)
-	balance3 = 1000
-	filename = 'Mark_balance.data'
-	with open(filename, 'w') as f:
-		json.dump(balance3, f)
+	filename1 = 'Alex_balance.data'
+	with open(filename1, 'r') as f:
+		balance1 = None
+		try:
+			json.load(f)
+		except:
+			pass
+		if not balance1:
+			balance1 = 0
+			with open(filename1, 'w') as f:
+				json.dump(balance1, f)		
+	filename2 = 'Anna_balance.data'
+	with open(filename2, 'r') as f:
+		balance2 = None
+		try:
+			json.load(f)
+		except:
+			pass
+		if not balance2:
+			balance2 = 100
+			with open(filename2, 'w') as f:
+				json.dump(balance2, f)
+	filename3 = 'Mark_balance.data'
+		with open(filename3, 'r') as f:
+		balance3 = None
+		try:
+			json.load(f)
+		except:
+			pass
+		if not balance3:
+			balance3 = 1000
+			with open(filename3, 'w') as f:
+				json.dump(balance3, f)
 
 def bank():
-	try:
-		filename = 'banknotes.data'
-		with open(filename) as f:
+	filename = 'banknotes.data'
+	with open(filename) as f:
+		banknotes = None
+		try:
 			banknotes = json.load(f)
-	except:
-		print('No banknotes.')		
-	finally:		
-		banknotes = {'10': 0, '20': 5, '50': 5, '100': 3, '200': 10, '500': 1, '1000': 1}
-		with open(filename, 'w') as f:
-			banknotes = json.dump(banknotes, f)
+		except:
+			pass
+		if not banknotes:	
+			banknotes = {'10': 0, '20': 5, '50': 5, '100': 3, '200': 10, '500': 1, '1000': 1}
+			with open(filename, 'w') as f:
+				json.dump(banknotes, f)
 	return banknotes					
 	
 def get_load():
@@ -208,7 +230,6 @@ def withdraw(user, summ):
 					balance = balance - summ
 					with open(filename, 'w') as f:
 						json.dump(balance, f)
-					return '\nYou withdrew ' + str(summ) + '.'
 			else:
 				return '\nNot enough money!'
 		else:
