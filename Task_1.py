@@ -64,7 +64,7 @@ def balance():
 			with open(filename2, 'w') as f:
 				json.dump(balance2, f)
 	filename3 = 'Mark_balance.data'
-		with open(filename3, 'r') as f:
+	with open(filename3, 'r') as f:
 		balance3 = None
 		try:
 			json.load(f)
@@ -124,98 +124,41 @@ def sort(summ):
 	with open(filename) as f:
 		banknotes = json.load(f)
 	summ_banknotes = 10 * banknotes['10'] + 20 * banknotes['20'] + 50 * banknotes['50'] + 100 * banknotes['100'] + 200 * banknotes['200'] + 500 * banknotes['500'] + 1000 * banknotes['1000']
-	sort_summ = {'10': 0, '20': 0, '50': 0, '100': 0, '200': 0, '500': 0, '1000': 0}
-	if summ_banknotes - summ >= 0:
-		if banknotes['1000'] > 0:
-			n1000 = summ // 1000
-			if n1000 <= banknotes['1000']:
-				sort_summ.update({'1000': sort_summ['1000'] + n1000})
-			else:
-				n1000 = banknotes['1000']
-				sort_summ.update({'1000': sort_summ['1000'] + n1000})
-			summ = summ - 1000 * n1000
-			if summ % 500 != 0 and summ % 200 != 0 and summ % 100 != 0 and summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0 :
-				n1000 = 0
-				summ = summ - 1000 * n1000
-				sort_summ.update({'1000': sort_summ['1000'] + n1000})
-			banknotes.update({'1000': banknotes['1000'] - n1000})
-		if banknotes['500'] >= 0:
-			n500 = summ // 500
-			if n500 <= banknotes['500']:
-				sort_summ.update({'500': sort_summ['500'] + n500})
-			else:
-				n500 = banknotes['500']
-				sort_summ.update({'500': sort_summ['500'] + n500})
-			summ = summ - 500 * n500
-			if summ % 200 != 0 and summ % 100 != 0 and summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
-				n500 = 0
-				summ = summ - 500 * n500
-				sort_summ.update({'500': sort_summ['500'] + n500})	
-			banknotes.update({'500': banknotes['500'] - n500})
-		if banknotes['200'] >= 0:
-			n200 = summ // 200
-			if n200 <= banknotes['200']:
-				sort_summ.update({'200': sort_summ['200'] + n200})
-			else:
-				n200 = banknotes['200']
-				sort_summ.update({'200': sort_summ['200'] + n200})
-			summ = summ - 200 * n200
-			if summ % 100 != 0 and summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
-				n200 = 0
-				summ = summ - 200 * n200
-				sort_summ.update({'200': sort_summ['200'] + n200})
-			banknotes.update({'200': banknotes['200'] - n200})
-		if banknotes['100'] >= 0:
-			n100 = summ // 100
-			if n100 <= banknotes['100']:
-				sort_summ.update({'100': sort_summ['100'] + n100})
-			else:
-				n100 = banknotes['100']
-				sort_summ.update({'100': sort_summ['100'] + n100})
-			summ = summ - 100 * n100
-			if summ % 50 != 0 and summ % 20 != 0 and summ % 10 != 0:
-				n100 = 0
-				summ = summ - 100 * n100
-				sort_summ.update({'100': sort_summ['100'] + n100})
-			banknotes.update({'100': banknotes['100'] - n100})
-		if banknotes['50'] >= 0:
-			n50 = summ // 50
-			if n50 <= banknotes['50']:
-				sort_summ.update({'50': sort_summ['50'] + n50})
-			else:
-				n50 = banknotes['50']
-				sort_summ.update({'50': sort_summ['50'] + n50})
-			summ = summ - 50 * n50
-			if summ % 20 != 0 and summ % 10 != 0:
-				n50 = 0
-				summ = summ - 50 * n50
-				sort_summ.update({'50': sort_summ['50'] + n50})
-			banknotes.update({'50': banknotes['50'] - n50})
-		if banknotes['20'] >= 0:
-			n20 = summ // 20
-			if n20 <= banknotes['20']:
-				sort_summ.update({'20': sort_summ['20'] + n20})
-			else:
-				n20 = banknotes['20']
-				sort_summ.update({'20': sort_summ['20'] + n20})
-			summ = summ - 20 * n20
-			if summ % 10 != 0:
-				n20 = 0
-				summ = summ - 20 * n20
-				sort_summ.update({'20': sort_summ['20'] + n20})
-			banknotes.update({'20': banknotes['20'] - n20})	
-		if banknotes['10'] >= 0:
-			n10 = summ // 10
-			if n10 <= banknotes['10']:
-				sort_summ.update({'10': sort_summ['10'] + n10})
-			else:
-				n10 = banknotes['10']
-				sort_summ.update({'10': sort_summ['10'] + n10})
-			summ = summ - 10 * n10
-			banknotes.update({'10': banknotes['10'] - n10})
-		print(f"\nYou got 10: {sort_summ['10']}, 20: {sort_summ['20']}, 50: {sort_summ['50']}, 100: {sort_summ['100']}, 200: {sort_summ['200']}, 500: {sort_summ['500']}, 1000: {sort_summ['1000']}.")	
-	else:
-		print('\nThe ATM does not have this amount of funds.')			
+	sort_summ = {}
+	nom = [1000, 500, 200, 100, 50, 20, 10]
+	for i in nom:
+		if banknotes['i'] == 0:
+			continue
+		n = summ // i
+		if banknotes['i'] < n:
+			n = banknotes['i']
+		summ = summ - n * i
+		if summ == 0:
+			sort_summ.update({'i': n})
+			summ = 0
+			cash = True
+			break
+		cash = False
+		nom.pop(i)
+		nom2 = nom
+		for j in nom2:
+			if banknotes['j'] > 0:
+				if summ % j == 0:
+					cash = True
+			if cash:				
+				m = summ // j
+				if banknotes['i'] < m:
+					m = banknotes['j']
+				sort_summ.update({'j': m})
+				summ = summ - m * j
+		if summ > 0:
+			print("Can't give a cash.")
+		else:
+			for k in sort_summ:
+				banknotes.update({'k': banknotes['k'] - sort_summ['k']})
+		with open(filename, 'w') as f:
+			json.dump(banknotes, f)
+	return cash		
 
 def withdraw(user, summ):
 	filename = str(user['login']) + '_balance.data'
