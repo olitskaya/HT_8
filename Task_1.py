@@ -139,18 +139,19 @@ def sort(summ):
 			cash = True
 			break
 		cash = False
-		nom2 = nom
-		for j in nom2:
+		for j in nom:
 			if j > i:
 				if banknotes[str(j)] > 0:
 					if summ % j == 0:
 						cash = True
 				if cash:				
 					m = summ // j
-					if banknotes[str(j)] < m:
+					if banknotes[str(j)] < m and m > 0:
 						m = banknotes[str(j)]
 					sort_summ.update({str(j): m})
 					summ = summ - m * j
+				else:
+					n = n - 1
 	if summ > 0:
 		print("Can't give a cash.")
 	else:
