@@ -127,35 +127,35 @@ def sort(summ):
 	sort_summ = {}
 	nom = [1000, 500, 200, 100, 50, 20, 10]
 	for i in nom:
-		if banknotes['i'] == 0:
+		if banknotes[str(i)] == 0:
 			continue
 		n = summ // i
-		if banknotes['i'] < n:
-			n = banknotes['i']
+		if banknotes[str(i)] < n:
+			n = banknotes[str(i)]
 		summ = summ - n * i
 		if summ == 0:
-			sort_summ.update({'i': n})
+			sort_summ.update({str(i): n})
 			summ = 0
 			cash = True
 			break
 		cash = False
-		nom.pop(i)
 		nom2 = nom
 		for j in nom2:
-			if banknotes['j'] > 0:
-				if summ % j == 0:
-					cash = True
-			if cash:				
-				m = summ // j
-				if banknotes['i'] < m:
-					m = banknotes['j']
-				sort_summ.update({'j': m})
-				summ = summ - m * j
-		if summ > 0:
-			print("Can't give a cash.")
-		else:
-			for k in sort_summ:
-				banknotes.update({'k': banknotes['k'] - sort_summ['k']})
+			if j > i:
+				if banknotes[str(j)] > 0:
+					if summ % j == 0:
+						cash = True
+				if cash:				
+					m = summ // j
+					if banknotes[str(j)] < m:
+						m = banknotes[str(j)]
+					sort_summ.update({str(j): m})
+					summ = summ - m * j
+	if summ > 0:
+		print("Can't give a cash.")
+	else:
+		for k in sort_summ:
+			banknotes.update({str(k): banknotes[str(k)] - sort_summ[str(k)]})
 		with open(filename, 'w') as f:
 			json.dump(banknotes, f)
 	return cash		
